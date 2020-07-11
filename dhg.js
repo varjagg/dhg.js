@@ -1,8 +1,9 @@
-// a list of directional hypergraphs
+// a list of directional hypergraph edges
 var dhgs = [
-    {name: "G1", sources: ["a","b"], targets: ["c","d"], projection:"p1"},
-    {name: "G2", sources: ["e"], targets: ["f","g"], projection:"p2"},
-    {name: "G3", sources: ["b", "d"], targets: ["f","a"], projection:"p2"}
+    {name: "e1", sources: ["a","b"], targets: ["c","d"], projection:"p1"},
+    {name: "e2", sources: ["e"], targets: ["f","g"], projection:"p2"},
+    {name: "e3", sources: ["b", "d"], targets: ["f","a"], projection:"p2"},
+    {name: "e4", sources: ["1", "2"], targets: ["3","4"], projection:"p2"}
 ];
 
 var links = [];
