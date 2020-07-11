@@ -34,12 +34,13 @@ links.forEach(function(link) {
 	dhgs.filter(dhg => {return dhg.name === link.target.name.substring(5)})[0].projection;
 });
 
-var width = 960,
-    height = 500;
+var width = window.innerWidth,
+    height = window.innerHeight;
 
 var force = d3.layout.force()
     .nodes(d3.values(nodes))
     .links(links)
+    .chargeDistance(300)
     .size([width, height])
     .on("tick", tick);
   
