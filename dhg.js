@@ -3,7 +3,14 @@ var dhgs = [
     {name: "e1", sources: ["a","b"], targets: ["c","d"], projection:"p1"},
     {name: "e2", sources: ["e"], targets: ["f","g"], projection:"p2"},
     {name: "e3", sources: ["b", "d"], targets: ["f","a"], projection:"p2"},
-    {name: "e4", sources: ["1", "2"], targets: ["3","4"], projection:"p2"}
+    {name: "e4", sources: ["1"], targets: ["2","3"], projection:"top-of"},
+    {name: "e5", sources: ["2", "3"], targets: ["4"], projection:"top-of"},
+    {name: "e6", sources: ["4"], targets: ["5","6"], projection:"top-of"},
+    {name: "e7", sources: ["5", "6"], targets: ["7"], projection:"top-of"},
+    {name: "e8", sources: ["2"], targets: ["1", "4"], projection:"right-of"},
+    {name: "e9", sources: ["1", "4"], targets: ["3"], projection:"right-of"},
+    {name: "e10", sources: ["5"], targets: ["7", "4"], projection:"right-of"},
+    {name: "e11", sources: ["7", "4"], targets: ["6"], projection:"right-of"},
 ];
 
 var links = [];
