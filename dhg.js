@@ -102,7 +102,7 @@ function stringToColor(str) {
 var path = svg.append("g").selectAll("path")
     .data(force.links())
     .enter().append("path")
-    .style("stroke", function(d) { return stringToColor(d.source.name); })
+    .style("stroke", function(d) { return stringToColor(d.dhg + "freshmeat"); })
     .attr("class", function(d) { return "link " + d.type; })
     .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
   
