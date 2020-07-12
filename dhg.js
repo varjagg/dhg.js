@@ -1,8 +1,12 @@
 // a list of directional hypergraph edges
-var dhgs = [
+var dhgs = new Map();
+
+dhgs.set("G1", [
     {name: "e1", sources: ["a","b"], targets: ["c","d"], projection:"p1"},
     {name: "e2", sources: ["e"], targets: ["f","g"], projection:"p2"},
     {name: "e3", sources: ["b", "d"], targets: ["f","a"], projection:"p2"},
+]);
+dhgs.set("G2", [
     {name: "e4", sources: ["1"], targets: ["2","3"], projection:"top-of"},
     {name: "e5", sources: ["2", "3"], targets: ["4"], projection:"top-of"},
     {name: "e6", sources: ["4"], targets: ["5","6"], projection:"top-of"},
@@ -11,22 +15,24 @@ var dhgs = [
     {name: "e9", sources: ["1", "4"], targets: ["3"], projection:"right-of"},
     {name: "e10", sources: ["5"], targets: ["7", "4"], projection:"right-of"},
     {name: "e11", sources: ["7", "4"], targets: ["6"], projection:"right-of"},
-];
+]);
 
 var links = [];
 
 // we convert the DHG list to a set of links
-dhgs.forEach(function(dhg) {
-    // three hidden nodes for projection placement
-    inv1 = "inv1_" + dhg.name;
-    inv2 = "inv2_" + dhg.name;
-    inv3 = "inv3_" + dhg.name;
-    links.push({source: inv1, target: inv2, type: "pointed"});
-    links.push({source: inv2, target: inv3, type: "plain"});
-    dhg.sources.forEach(function(src) {
-	links.push({source: src, target: inv1, type: "plain"})});
-    dhg.targets.forEach(function(target) {
-	links.push({source: inv3, target: target, type: "plain"})});
+dhgs.forEach(function(edges, name) {
+    edges.forEach(function(edge) {
+	// three hidden nodes for projection placement
+	inv1 = "inv1_" + edge.name;
+	inv2 = "inv2_" + edge.name;
+	inv3 = "inv3_" + edge.name;
+	links.push({source: inv1, target: inv2, type: "pointed", dhg: name});
+	links.push({source: inv2, target: inv3, type: "plain", dhg: name});
+	edge.sources.forEach(function(src) {
+	    links.push({source: src, target: inv1, type: "plain", dhg: name})});
+	edge.targets.forEach(function(target) {
+	    links.push({source: inv3, target: target, type: "plain", dhg: name})});
+    });
 });
 
 var nodes = {};
@@ -39,7 +45,7 @@ links.forEach(function(link) {
     // projection should have a visible label
     if(link.target.name.includes("inv2"))
 	nodes[link.target.name].label =
-	dhgs.filter(dhg => {return dhg.name === link.target.name.substring(5)})[0].projection;
+	dhgs.get(link.dhg).filter(dhg => {return dhg.name === link.target.name.substring(5)})[0].projection;
 });
 
 var width = window.innerWidth,
@@ -80,9 +86,23 @@ svg.append("defs").selectAll("marker")
   .append("path")
     .attr("d", "M0,-5L10,0L0,5");
 
+function stringToColor(str) {
+  var hash = 0;
+  for (var i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  var color = '#';
+  for (var i = 0; i < 3; i++) {
+    var value = (hash >> (i * 8)) & 0xFF;
+    color += ('00' + value.toString(16)).substr(-2);
+  }
+  return color;
+}
+
 var path = svg.append("g").selectAll("path")
     .data(force.links())
-  .enter().append("path")
+    .enter().append("path")
+    .style("stroke", function(d) { return stringToColor(d.source.name); })
     .attr("class", function(d) { return "link " + d.type; })
     .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
   
