@@ -54,19 +54,14 @@ var width = window.innerWidth,
 var force = d3.layout.force()
     .nodes(d3.values(nodes))
     .links(links)
+    .linkDistance(function(link) {
+	return (link.source.name.includes("inv") && link.target.name.includes("inv")) ? 0 : 50;})
     .chargeDistance(300)
+    .charge(function(node) {
+	return (node.name.includes("inv")) ? -200 : -300;})
     .size([width, height])
-    .on("tick", tick);
-  
-force.linkDistance(function(link) {
-    return (link.source.name.includes("inv") && link.target.name.includes("inv")) ? 0 : 50;
-});
-
-force.charge(function(node) {
-    return (node.name.includes("inv")) ? -200 : -300;
-});
-
-force.start();
+    .on("tick", tick)
+    .start();
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
